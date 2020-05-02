@@ -7,5 +7,5 @@ setup(name='nbthaq',
       author='Christopher Kelly',
       author_email='chris@nourishbalancethrive.com',
       license='MIT',
-      packages=['funniest'],
+      packages=['nbthaq'],
       zip_safe=False)
