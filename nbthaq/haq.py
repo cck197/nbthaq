@@ -31,7 +31,7 @@ class Energy(db.EmbeddedDocument):
     )
     exhaustion = db.IntField(
         choices=echoices(CHOICES1),
-        verbose_name="In the past seven days, I felt extreme exhaustion...",
+        verbose_name="In the past seven days, I experienced extreme exhaustion...",
     )
     energy = db.IntField(
         choices=echoices(CHOICES1),
@@ -79,50 +79,50 @@ class Sleep(db.EmbeddedDocument):
 class Digestion(db.EmbeddedDocument):
     meta = {"strict": False}
     gas = db.IntField(
-        choices=echoices(CHOICES1), verbose_name="In the past seven days, I had gas..."
+        choices=echoices(CHOICES4), verbose_name="In the past seven days, I had gas..."
     )
     bloated = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I was bloated...",
     )
     constipated = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I went more than a day without defecation...",
     )
     diarrhoea = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I had diarrhoea...",
     )
     rumbled = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, my stomach rumbled...",
     )
     sweet = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I had sweet cravings...",
     )
     fat = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I had cravings for fat...",
     )
     satisfy = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, eating didn't satisfy my hunger...",
     )
     tired = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I felt tired after eating...",
     )
     hours = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I couldn't go more than a few hours without eating...",
     )
     shaky = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I felt shaky in between meals...",
     )
     irritable = db.IntField(
-        choices=echoices(CHOICES1),
+        choices=echoices(CHOICES4),
         verbose_name="In the past seven days, I felt irritable in between meals...",
     )
 
@@ -141,7 +141,7 @@ class Body(db.EmbeddedDocument):
     )
     happy2 = db.IntField(
         choices=echoices(CHOICES4),
-        verbose_name="In the past 30 days, I have been happy with my body composition...",
+        verbose_name="In the past 30 days, I have been happy with my body composition (fatness)...",
         help_text="(fatness)",
     )
 
@@ -254,7 +254,6 @@ class Isolation(db.EmbeddedDocument):
         choices=echoices(CHOICES1, rev=True),
         verbose_name="I feel part of a group of friends...",
     )
-    feel = db.IntField(choices=echoices(CHOICES1), verbose_name="I feel isolated...")
 
 
 class Challenges(db.EmbeddedDocument):
