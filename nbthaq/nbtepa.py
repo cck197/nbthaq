@@ -3,8 +3,8 @@ import numpy as np
 from collections import defaultdict
 from functools import partial
 
-import haq
-from mongoengine.db.base.metaclasses import DocumentMetaclass
+from . import haq
+from mongoengine.base.metaclasses import DocumentMetaclass
 
 
 class NBTEPA(object):
@@ -19,9 +19,7 @@ class NBTEPA(object):
         df = df.astype("category")
         self.df = df
         classes = [
-            key
-            for key in dir(haq)
-            if type(getattr(haq, key)) is DocumentMetaclass
+            key for key in dir(haq) if type(getattr(haq, key)) is DocumentMetaclass
         ]
         d = {}
         dmap = defaultdict(list)
