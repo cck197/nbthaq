@@ -16,7 +16,6 @@ class NBTEPA(object):
             ("I feel part of a group of friends...", "Quite a bit"),
         ]
         [df.drop(df[df[k] == v].index, inplace=True) for (k, v) in to_filter]
-        df = df.astype("category")
         classes = [
             key for key in dir(haq) if type(getattr(haq, key)) is DocumentMetaclass
         ]
@@ -31,6 +30,16 @@ class NBTEPA(object):
                     dmap[clsname].append(f.verbose_name)
                     d[f.verbose_name] = {name: score for (score, name) in f.choices}
         df.dropna(thresh=5, subset=d.keys(), inplace=True)
+        # The Surveygizmo version used different choices for Digestion
+        choice_map = {
+            'Not at all': 'Never',
+            'A little bit': 'Rarely',
+            'Somewhat': 'Sometimes',
+            'Quite a bit': 'Often',
+            'Very much': 'Always',
+        }
+        df[dmap['Digestion']] = df[dmap['Digestion']].replace(choice_map)
+        df = df.astype("category")
         self.d = d
         self.df, self.dmap, self.qmap = self.convert_df(df), dmap, qmap
 
