@@ -17,22 +17,28 @@ class NBTEPA(object):
         ]
         [df.drop(df[df[k] == v].index, inplace=True) for (k, v) in to_filter]
         df = df.astype("category")
-        self.df = df
         classes = [
             key for key in dir(haq) if type(getattr(haq, key)) is DocumentMetaclass
         ]
         d = {}
         dmap = defaultdict(list)
+        qmap = {}
         for clsname in classes:
             cls = getattr(haq, clsname)
             for f in cls._fields.values():
                 if f.choices is not None:
+                    qmap[f"{cls.__name__}.{f.db_field}".lower()] = f.verbose_name
                     dmap[clsname].append(f.verbose_name)
                     d[f.verbose_name] = {name: score for (score, name) in f.choices}
         df.dropna(thresh=5, subset=d.keys(), inplace=True)
-        for k in d.keys():
-            df[f"{k}_"] = df[k].apply(lambda x: d[k][x])
-        self.df, self.d, self.dmap = df, d, dmap
+        self.d = d
+        self.df, self.dmap, self.qmap = self.convert_df(df), dmap, qmap
+
+    def convert_df(self, df):
+        for k in self.d.keys():
+            if k in df:
+                df[f"{k}_"] = df[k].apply(lambda x: self.d[k][x])
+        return df
 
     def get_total_score(self, df, row):
         total = 0
