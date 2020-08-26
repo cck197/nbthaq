@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='nbthaq',
-      version='0.3',
+      version='0.31',
       description='Nourish Balance Thrive Health Assessment Questionnaire',
       url='http://github.com/cck197/nbthaq',
       author='Christopher Kelly',

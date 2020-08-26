@@ -1,3 +1,5 @@
+import json
+import pandas as pd
 from collections import defaultdict
 import mongoengine as db
 from flask_mongoengine.wtf import model_form
@@ -354,6 +356,22 @@ class HAQ(db.Document):
                     subtally[HAQ.get_verbose_name(attr, attr_)] = val
                 tally[HAQ.get_cls_name(attr)] = subtally
         return tally
+
+    def get_val(self, key):
+        (k, k_) = key.split(".")
+        return getattr(getattr(self, k), f"get_{k_}_display")()
+
+    def get_df(self, qmap):
+        d = {}
+        for k, v in json.loads(self.to_json()).items():
+            if k.startswith("_"):
+                continue
+            for k1, v1 in v.items():
+                k2 = f"{k}.{k1}"
+                k3 = qmap.get(k2)
+                if k3 is not None:
+                    d[k3] = self.get_val(k2)
+        return pd.DataFrame.from_dict([d])
 
 
 def get_haq_combined_data(reports):

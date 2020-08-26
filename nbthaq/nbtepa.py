@@ -32,13 +32,13 @@ class NBTEPA(object):
         df.dropna(thresh=5, subset=d.keys(), inplace=True)
         # The Surveygizmo version used different choices for Digestion
         choice_map = {
-            'Not at all': 'Never',
-            'A little bit': 'Rarely',
-            'Somewhat': 'Sometimes',
-            'Quite a bit': 'Often',
-            'Very much': 'Always',
+            "Not at all": "Never",
+            "A little bit": "Rarely",
+            "Somewhat": "Sometimes",
+            "Quite a bit": "Often",
+            "Very much": "Always",
         }
-        df[dmap['Digestion']] = df[dmap['Digestion']].replace(choice_map)
+        df[dmap["Digestion"]] = df[dmap["Digestion"]].replace(choice_map)
         df = df.astype("category")
         self.d = d
         self.df, self.dmap, self.qmap = self.convert_df(df), dmap, qmap
@@ -80,3 +80,23 @@ class NBTEPA(object):
                 df[f"{s}_score_pct"],
             ) = self.add_scores_(ddf)
         return df
+
+    def get_data(self, errorbar=False):
+        """Highcharts format"""
+        df = (
+            self.df[[k for k in self.df.columns if "_score_total" in k]]
+            .describe()
+            .T.copy()
+        )
+        d = []
+        for (index, row) in df.iterrows():
+            y = [row["25%"], row["50%"], row["75%"]]
+            k = index.split("_")[0].capitalize()
+            d.append({"name": k, "y": y, "drilldown": k})
+        d = sorted(d, key=lambda x: x["y"][1], reverse=True)
+        if errorbar:
+            return [[k["y"][0], k["y"][2]] for k in d]
+        else:
+            for k in d:
+                k["y"] = k["y"][1]
+        return d
