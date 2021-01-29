@@ -93,7 +93,7 @@ class NBTEPA(object):
             y = [row["25%"], row["50%"], row["75%"]]
             k = index.split("_")[0].capitalize()
             d.append({"name": k, "y": y, "drilldown": k})
-        d = sorted(d, key=lambda x: x["y"][1], reverse=True)
+        d = sorted(d, key=lambda x: x["name"])
         if errorbar:
             return [[k["y"][0], k["y"][2]] for k in d]
         else:

@@ -268,20 +268,23 @@ class Challenges(db.EmbeddedDocument):
 
 class Tally(dict):
     def get_data(self):
-        return [
-            {"name": key, "y": sum(self[key].values()), "drilldown": key}
-            for (key, val) in self.items()
-        ]
+        return sorted(
+            [
+                {"name": key, "y": sum(self[key].values()), "drilldown": key}
+                for (key, val) in self.items()
+            ],
+            key=lambda x: x["name"],
+        )
 
     def get_drilldown(self):
-        return [
+        return sorted([
             {
                 "name": key,
                 "id": key,
                 "data": [[key_, val_] for (key_, val_) in val.items()],
             }
             for (key, val) in self.items()
-        ]
+        ], key=lambda x: x["name"])
 
     def sum_cat(self):
         return dict([(key, sum(val.values())) for (key, val) in self.items()])
