@@ -246,7 +246,7 @@ class Sex(db.EmbeddedDocument):
 class Isolation(db.EmbeddedDocument):
     meta = {"strict": False}
     feel = db.IntField(
-        choices=echoices(CHOICES1, rev=True), verbose_name="I feel isolated..."
+        choices=echoices(CHOICES1), verbose_name="I feel isolated..."
     )
     talk = db.IntField(
         choices=echoices(CHOICES1, rev=True),
