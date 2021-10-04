@@ -245,9 +245,7 @@ class Sex(db.EmbeddedDocument):
 
 class Isolation(db.EmbeddedDocument):
     meta = {"strict": False}
-    feel = db.IntField(
-        choices=echoices(CHOICES1), verbose_name="I feel isolated..."
-    )
+    feel = db.IntField(choices=echoices(CHOICES1), verbose_name="I feel isolated...")
     talk = db.IntField(
         choices=echoices(CHOICES1, rev=True),
         verbose_name="There are people I can talk to...",
@@ -266,6 +264,13 @@ class Challenges(db.EmbeddedDocument):
     )
 
 
+class Notes(db.EmbeddedDocument):
+    meta = {"strict": False, "close_ended": False}
+    when = db.StringField(
+        verbose_name="Jot down anything you like here. Perhaps you'd like to remember something that was going on around the time you did this test?",
+    )
+
+
 class Tally(dict):
     def get_data(self):
         return sorted(
@@ -277,14 +282,17 @@ class Tally(dict):
         )
 
     def get_drilldown(self):
-        return sorted([
-            {
-                "name": key,
-                "id": key,
-                "data": [[key_, val_] for (key_, val_) in val.items()],
-            }
-            for (key, val) in self.items()
-        ], key=lambda x: x["name"])
+        return sorted(
+            [
+                {
+                    "name": key,
+                    "id": key,
+                    "data": [[key_, val_] for (key_, val_) in val.items()],
+                }
+                for (key, val) in self.items()
+            ],
+            key=lambda x: x["name"],
+        )
 
     def sum_cat(self):
         return dict([(key, sum(val.values())) for (key, val) in self.items()])
@@ -301,6 +309,7 @@ class HAQ(db.Document):
     sex = db.EmbeddedDocumentField(Sex)
     isolation = db.EmbeddedDocumentField(Isolation)
     challenges = db.EmbeddedDocumentField(Challenges)
+    notes = db.EmbeddedDocumentField(Notes)
 
     def __init__(self, rptid, *args, **values):
         super().__init__(*args, **values)
@@ -313,6 +322,7 @@ class HAQ(db.Document):
             ("sex", Sex),
             ("isolation", Isolation),
             ("challenges", Challenges),
+            ("notes", Notes),
         ):
             obj = getattr(self, attr, None)
             if obj is None:
