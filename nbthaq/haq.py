@@ -1,11 +1,11 @@
 import json
-import pandas as pd
 from collections import defaultdict
-import mongoengine as db
-from flask_mongoengine.wtf import model_form
-from flask_mongoengine.wtf.orm import ModelConverter
-from wtforms import fields as f, validators
 from random import shuffle
+
+import mongoengine as db
+import pandas as pd
+from flask_mongoengine.wtf import model_form
+from wtforms import fields as f
 
 CHOICES1 = (
     "Never",
@@ -313,7 +313,7 @@ class HAQ(db.Document):
 
     def __init__(self, rptid, *args, **values):
         super().__init__(*args, **values)
-        for (attr, cls) in (
+        for attr, cls in (
             ("energy", Energy),
             ("sleep", Sleep),
             ("digestion", Digestion),
@@ -389,9 +389,9 @@ class HAQ(db.Document):
 
 def get_haq_combined_data(reports):
     dd = defaultdict(list)
-    for (rptid, args) in reports.sorted():
+    for rptid, args in reports.sorted():
         start = args["date"] * 1000  # ms for JS
-        for (key, val) in HAQ.get(rptid).get_tally().sum_cat().items():
+        for key, val in HAQ.get(rptid).get_tally().sum_cat().items():
             dd[key].append([start, val])
     return dd
 
@@ -401,7 +401,7 @@ def get_haq_fields(form, shuffle_=True):
 
     def get_fields_(form, fields):
         for field in form:
-            if type(field) is f.core.FormField:
+            if type(field) is f.FormField:
                 get_fields_(getattr(form, field.name), fields)
             elif (
                 type(field) is not f.simple.TextAreaField

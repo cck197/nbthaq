@@ -1,10 +1,10 @@
-import pandas as pd
-import numpy as np
 from collections import defaultdict
 from functools import partial
 
-from . import haq
+import pandas as pd
 from mongoengine.base.metaclasses import DocumentMetaclass
+
+from . import haq
 
 
 class NBTEPA(object):
@@ -70,7 +70,7 @@ class NBTEPA(object):
         if df is None:
             df = self.df
         df["score_total"], df["score_max"], df["score_pct"] = self.add_scores_(df)
-        for (cat, cols) in self.dmap.items():
+        for cat, cols in self.dmap.items():
             dcols = [k for k in df.columns if k.replace("_", "") in cols]
             ddf = df[dcols].copy()
             s = cat.lower()
@@ -89,7 +89,7 @@ class NBTEPA(object):
             .T.copy()
         )
         d = []
-        for (index, row) in df.iterrows():
+        for index, row in df.iterrows():
             y = [row["25%"], row["50%"], row["75%"]]
             k = index.split("_")[0].capitalize()
             d.append({"name": k, "y": y, "drilldown": k})
